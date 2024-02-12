@@ -1,4 +1,4 @@
-# Note: Repository is currently being organized (not done yet)
+**Note: Repository is currently being organized (not done yet)**
 
 # Learning Energy Decompositions for Partial Inference in GFlowNets
 
