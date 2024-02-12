@@ -2,6 +2,8 @@
 
 This is an official implementation of our paper **Learning Energy Decompositions for Partial Inference in GFlowNets (LED-GFN)** accepted at **ICLR 2024 (oral)**. 
 
+**Note: Repository is currently being organized**
+
 ## Repository Overview
 We provide the PyTorch implementation for LED-GFN framework here. The repository is organized as follows:
 
