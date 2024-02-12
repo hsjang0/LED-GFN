@@ -10,7 +10,7 @@ We provide the PyTorch implementation for LED-GFN framework here. The repository
 ```
 
 - led-gfn-Bengio: The code is based on [https://github.com/GFNOrg/gflownet/tree/master/mols](https://github.com/GFNOrg/gflownet/tree/master/mols)
-- led-gfn-Shen: The code is based on [https://github.com/GFNOrg/gflownet/tree/master/mols](https://github.com/maxwshen/gflownet)
+- led-gfn-Shen: The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
 - ...: ...
 
 ## Setting up the environment and Running
