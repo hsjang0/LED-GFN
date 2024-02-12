@@ -12,9 +12,9 @@ We provide the PyTorch implementation for LED-GFN framework here. The repository
 |-- {led-gfn-Bengio, led-gfn-Shen, led-gfn-Zhang} # implementations of LED-GFN on various tasks
 ```
 
-- led-gfn-Bengio (molecule): The code is based on [https://github.com/GFNOrg/gflownet/tree/master/mols](https://github.com/GFNOrg/gflownet/tree/master/mols)
-- led-gfn-Shen (bag and rna sequence): The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
-- led-gfn-Zhang (maximum independent set): ...
+- led-gfn-Bengio (**molecule**): The code is based on [https://github.com/GFNOrg/gflownet/tree/master/mols](https://github.com/GFNOrg/gflownet/tree/master/mols)
+- led-gfn-Shen (**bag and rna sequence**): The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
+- led-gfn-Zhang (**maximum independent set**): ...
 
 ## Setting up the environment and Running
 You can check how to set up the environment and run the experiments in each directory. 
