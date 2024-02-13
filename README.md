@@ -13,4 +13,4 @@ We provide the PyTorch implementation for LED-GFN framework here. Our implementa
 - led-gfn-Zhang (**maximum independent set**): ...
 
 ## Setting up the environment and Running
-One can check how to set up the environment and run the experiments in each directory. 
+One can check how to run the experiments in each directory. 
