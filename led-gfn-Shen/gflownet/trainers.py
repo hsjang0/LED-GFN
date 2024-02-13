@@ -92,6 +92,10 @@ class Trainer:
             offline_xs = self.select_offline_xs(allXtoR, offline_bsize)
             offline_dataset = self.offline_PB_traj_sample(offline_xs, allXtoR)
 
+            # Save to buffer for LED
+            limited_buffer.append(offline_dataset)
+            limited_buffer = limited_buffer[-100:]
+          
           for step_num in range(self.args.num_steps_per_batch):
             # Learning energy decomposition
             if (self.args.model in ['subtb_rd','db_rd']):
