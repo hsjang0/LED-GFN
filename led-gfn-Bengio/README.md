@@ -1,5 +1,6 @@
-# Learning energy decomposition for GFlowNet
-This is an implementation on molecule generation task.
+# Note
+
+The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
 
 ## Additional requirements:
 
