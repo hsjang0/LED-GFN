@@ -10,10 +10,10 @@ You can run your experiment by
 
 #### Run LED-GFN with subTB
 ```
-python runexpwb.py --setting tfbind8 --sa_or_ssr ssr --model subtb_rd --offline_select random
+python runexpwb.py --setting tfbind8 --sa_or_ssr ssr --offline_select random --model subtb_rd
 ```
 
 #### Run LED-GFN with db
 ```
-python runexpwb.py --setting tfbind8 --sa_or_ssr ssr --model db_rd --offline_select random
+python runexpwb.py --setting tfbind8 --sa_or_ssr ssr --offline_select random --model db_rd
 ```
