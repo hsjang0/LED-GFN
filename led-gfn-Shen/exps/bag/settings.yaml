@@ -21,7 +21,7 @@ clip_param: 0.2
 entropy_coef: 0.01
 sql_alpha: 0.01
 model: 'subtb' # choices=['subtb', 'maxent', 'random', 'tb', 'db', 'subtb', 'db_fl', 'subtb_fl', 'db_rd', 'subtb_rd']
-lamda: 0.9
+lamda: 0.99
 init_logz: True
 offline_select: 'prt'
 sa_or_ssr: 'ssr'
