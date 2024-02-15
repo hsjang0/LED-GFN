@@ -66,7 +66,7 @@ class Trainer:
             
             # Save to buffer for LED
             limited_buffer.append(explore_data)
-            limited_buffer = limited_buffer[-100:]
+            limited_buffer = limited_buffer[-300:]
               
           # Save to full dataset
           for exp in explore_data:
@@ -94,7 +94,7 @@ class Trainer:
 
             # Save to buffer for LED
             limited_buffer.append(offline_dataset)
-            limited_buffer = limited_buffer[-100:]
+            limited_buffer = limited_buffer[-300:]
           
           for step_num in range(self.args.num_steps_per_batch):
             # Learning energy decomposition
