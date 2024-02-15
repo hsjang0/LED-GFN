@@ -2,11 +2,16 @@
 
 The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
 
-## Additional requirements:
+### Requirements
+
+```bash
+pip install -r requirements.txt
+```
 
 - pandas rdkit torch_geometric h5py ray
 
-## Running
+### How to run?
+
 ```sh
 python main.py gflownet_led.py --objective detbal or subtb
 ```
