@@ -23,7 +23,7 @@ sql_alpha: 0.01
 model: 'subtb' # choices=['subtb', 'maxent', 'random', 'tb', 'db', 'subtb', 'db_fl', 'subtb_fl', 'db_rd', 'subtb_rd']
 lamda: 0.99
 init_logz: True
-offline_select: 'prt'
+offline_select: 'random'
 sa_or_ssr: 'ssr'
 
 # model architecture
