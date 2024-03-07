@@ -207,7 +207,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
 
 
 
-    reward_est = model_block.GraphAgent_rwd(
+    potential_function = model_block.GraphAgent_rwd(
             nemb=args.nemb,
             nvec=0,
             out_per_stem=dataset.mdp.num_blocks,
@@ -218,7 +218,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
         ).cuda()
 
     opt_est = torch.optim.Adam(
-        reward_est.parameters(), 
+        potential_function.parameters(), 
         1e-3, 
         weight_decay=args.weight_decay,
         betas=(args.opt_beta, args.opt_beta2),
@@ -248,7 +248,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
         opt.zero_grad()
         opt_est.zero_grad()
         for gg in range(0,args.decompose_step):
-            potentials = reward_est(s.cuda(), s.cuda(), None).view(-1)
+            potentials = potential_function(s.cuda(), s.cuda(), None).view(-1)
             loss = learning_decomposition(potentials, torch.log(traj_r), lens)
             potentials_use = potentials.detach()
             opt_est.zero_grad()
@@ -302,7 +302,7 @@ def main(args):
 
     mdp = dataset.mdp
 
-    model = make_model(args, mdp, out_per_mol=1 + (1 if (args.objective in ['detbal']) else 0))
+    model = make_model(args, mdp, out_per_mol=1 + (1 if (args.objective in ['detbal','subTB']) else 0))
     model.to(args.floatX)
     model.to(device)
 
