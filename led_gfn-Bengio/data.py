@@ -271,9 +271,10 @@ class Dataset:
 
     def tasimoto(self):
         dists =[]
-        for (_,m1), (_,m2) in zip(self.top_100, self.top_100[1:] + self.top_100[:1]):
-            dist = DataStructs.FingerprintSimilarity(Chem.RDKFingerprint(m1.mol), Chem.RDKFingerprint(m2.mol))
-            dists.append(dist)
+        for e, (_,m1) in enumerate(self.top_100):
+            for (_,m2) in (self.top_100[e+1:]):
+                dist = DataStructs.FingerprintSimilarity(Chem.RDKFingerprint(m1.mol), Chem.RDKFingerprint(m2.mol))
+                dists.append(dist)
         return np.mean(dists)
 
     def sample(self, n):
