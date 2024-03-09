@@ -49,7 +49,6 @@ class Trainer:
     print(f'Starting active learning. \
             Each round: num_online={num_online}, num_offline={num_offline}')
     
-    total_samples = []
     limited_buffer = []
     for round_num in tqdm(range(self.args.num_active_learning_rounds)):
       print(f'Starting learning round {round_num+1} / {self.args.num_active_learning_rounds} ...')
@@ -66,7 +65,7 @@ class Trainer:
             
             # Save to buffer for LED
             limited_buffer.append(explore_data)
-            limited_buffer = limited_buffer[-300:]
+            limited_buffer = limited_buffer[-self.args.buffer_size:]
               
           # Save to full dataset
           for exp in explore_data:
@@ -79,6 +78,7 @@ class Trainer:
             if (self.args.model in ['subtb_rd','db_rd']):
               for _ in range(self.args.led_step):
                 self.model.train_proxy(limited_buffer[random.randint(0,len(limited_buffer)-1)])
+                
             self.model.train(explore_data)          
           
           if self.args.model in ['ppo']:
@@ -94,13 +94,14 @@ class Trainer:
 
             # Save to buffer for LED
             limited_buffer.append(offline_dataset)
-            limited_buffer = limited_buffer[-300:]
+            limited_buffer = limited_buffer[-self.args.buffer_size:]
           
           for step_num in range(self.args.num_steps_per_batch):
             # Learning energy decomposition
             if (self.args.model in ['subtb_rd','db_rd']):
               for _ in range(self.args.led_step):
                 self.model.train_proxy(limited_buffer[random.randint(0,len(limited_buffer)-1)])
+                
             self.model.train(offline_dataset)
        
        
