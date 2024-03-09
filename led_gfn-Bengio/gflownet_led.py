@@ -73,12 +73,13 @@ parser.add_argument("--include_nblocks", default=False)
 parser.add_argument("--balanced_loss", default=True)
 parser.add_argument("--early_stop_reg", default=0.1, type=float)
 parser.add_argument("--initial_log_Z", default=30, type=float)
-parser.add_argument("--objective", default='detbal', type=str)
+parser.add_argument("--objective", default='subTB', type=str)
 # If True this basically implements Buesing et al's TreeSample Q/SoftQLearning, samples uniformly from it though, no MCTS involved
 parser.add_argument("--ignore_parents", default=False)
 parser.add_argument("--fl", default=0, type=int)
 parser.add_argument("--num_samples", default=100, type=int)
 parser.add_argument("--decompose_step", default=3, type=int)
+parser.add_argument("--dropout_prob", default=0.1, type=float)
 
 #@torch.jit.script
 def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):        
@@ -125,7 +126,7 @@ def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
     return total_loss
 
 #@torch.jit.script
-def learning_decomposition(R_est, R, traj_lengths):
+def learning_decomposition(R_est, R, traj_lengths, dropout_prob):
     cumul_lens = torch.cumsum(torch.cat([torch.zeros(1, device=traj_lengths.device), traj_lengths]), 0).long()
     total_loss = torch.zeros(1, device=traj_lengths.device)
     for ep in range(traj_lengths.shape[0]):
@@ -134,9 +135,9 @@ def learning_decomposition(R_est, R, traj_lengths):
         T = int(traj_lengths[ep])
 
         mask_r = torch.rand((T-1)).to(R_cum.device)
-        mask_r[mask_r>=0.1] = 1
-        mask_r[mask_r<0.1] = 0
-        mask_r[0] = 1
+        mask_r[mask_r>=dropout_prob] = 1
+        mask_r[mask_r<dropout_prob] = 0
+        mask_r[-1] = 1 if torch.sum(mask_r)==0 else mask_r[-1]
 
         R_cum = torch.sum(R_est[offset:offset+T-1] * mask_r)
         R_cum = R_cum * (T-1)/torch.sum(mask_r)
@@ -249,7 +250,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
         opt_est.zero_grad()
         for gg in range(0,args.decompose_step):
             potentials = potential_function(s.cuda(), s.cuda(), None).view(-1)
-            loss = learning_decomposition(potentials, torch.log(traj_r), lens)
+            loss = learning_decomposition(potentials, torch.log(traj_r), lens, args.dropout_prob)
             potentials_use = potentials.detach()
             opt_est.zero_grad()
             loss.backward()
@@ -279,7 +280,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
         if (not i % 100) and i >= 0:
             print({
                 "top_100": np.mean(dataset.top_100_rwd()),
-                "mode": dataset.good,
+                "mode": dataset.modes,
                 "similarity": dataset.tasimoto(),
             })
 

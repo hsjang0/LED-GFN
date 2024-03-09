@@ -127,7 +127,7 @@ class MolMDPExtended(MolMDP):
             # Pop the bond
             new_mol.jbonds.pop(rjbidx)
             # Remove the block
-            mask = np.ones(len(new_mol.blockidxs), dtype=np.bool)
+            mask = np.ones(len(new_mol.blockidxs), dtype=np.bool_)
             mask[rblockidx] = 0
             reindex = new_mol.delete_blocks(mask)
             # reindex maps old blockidx to new blockidx, since the

@@ -33,8 +33,8 @@ atomic_numbers = {"H": 1, "He": 2, "Li": 3, "Be": 4, "B": 5, "C": 6, "N": 7, "O"
                   "Te": 52, "I": 53, "Xe": 54, "Cs": 55, "Ba": 56}
 
 
-def onehot(arr, num_classes, dtype=np.int):
-    arr = np.asarray(arr, dtype=np.int)
+def onehot(arr, num_classes, dtype=np.int32):
+    arr = np.asarray(arr, dtype=np.int32)
     assert len(arr.shape) ==1, "dims other than 1 not implemented"
     onehot_arr = np.zeros(arr.shape + (num_classes,), dtype=dtype)
     onehot_arr[np.arange(arr.shape[0]), arr] = 1

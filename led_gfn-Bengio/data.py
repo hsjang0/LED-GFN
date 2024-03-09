@@ -45,7 +45,7 @@ class Dataset:
         self.sampling_model_prob = 0
         self.floatX = floatX
         self.mdp.floatX = self.floatX
-        self.good = 0
+        self.modes = 0
         
         
         #######
@@ -241,7 +241,7 @@ class Dataset:
             if save_true and not (smi in self.is_visit):
                 heapq.heappush(self.top_100, (a,m))
                 if a >= 7.5:
-                    self.good += 1
+                    self.modes += 1
                     
                 self.is_visit[smi] = True
                 if len(self.top_100) > 100:
@@ -257,7 +257,7 @@ class Dataset:
         if save_true and not (smi in self.is_visit):
             heapq.heappush(self.top_100, (a,m))
             if a >= 7.5:
-                self.good += 1
+                self.modes += 1
             
             self.is_visit[smi] = True
             if len(self.top_100) > 100:
