@@ -249,7 +249,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
         opt.zero_grad()
         opt_est.zero_grad()
         for gg in range(0,args.decompose_step):
-            potentials = potential_function(s.cuda(), s.cuda(), None).view(-1)
+            potentials = potential_function(s.cuda(), None).view(-1)
             loss = learning_decomposition(potentials, torch.log(traj_r), lens, args.dropout_prob)
             potentials_use = potentials.detach()
             opt_est.zero_grad()
