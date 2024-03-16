@@ -387,11 +387,10 @@ class GraphAgent_rwd(nn.Module):
         )
 
     def forward(self, graph_data, vec_data=None, do_stems=True):
-        random_s_emb = self.v1_model(copy.deepcopy(graph_data))
+        emd = self.v1_model(copy.deepcopy(graph_data))
         
-        global_mean_pool_out = torch.cat([random_s_emb[:-1], random_s_emb[1:]], dim = -1)
+        global_mean_pool_out = torch.cat([emd[:-1], emd[1:]], dim = -1)
         mol_preds = self.global2pred(global_mean_pool_out)
-        #print(mol_preds)
         return mol_preds
     
 
@@ -407,8 +406,7 @@ class GraphAgent_model(nn.Module):
         )
 
     def forward(self, graph_data, vec_data=None, do_stems=True):
-        random_s_emb1 = self.v1_model(copy.deepcopy(graph_data))
-        mol_preds = self.global2pred(random_s_emb1)
-        #print(mol_preds)
+        emd = self.v1_model(copy.deepcopy(graph_data))
+        mol_preds = self.global2pred(emd)
         return mol_preds
     
