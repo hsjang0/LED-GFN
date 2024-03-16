@@ -212,7 +212,7 @@ def train_model_with_proxy(args, model, proxy, dataset, num_steps=None, do_save=
             nemb=args.nemb,
             nvec=0,
             out_per_stem=dataset.mdp.num_blocks,
-            out_per_mol=1 + (1 if (args.objective in ['detbal']) else 0),
+            out_per_mol=1,
             num_conv_steps=args.num_conv_steps,
             mdp_cfg=dataset.mdp,
             version=args.model_version,
