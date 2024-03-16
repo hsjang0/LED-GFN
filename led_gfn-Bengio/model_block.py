@@ -380,19 +380,16 @@ class GraphAgent_rwd(nn.Module):
         super().__init__()
 
         self.v1_model = StateEmbeddingNet(2*nemb, nvec, num_conv_steps, mdp_cfg, version)
-        self.v2_model = StateEmbeddingNet(2*nemb, nvec, num_conv_steps, mdp_cfg, version)
-
         self.global2pred = nn.Sequential(
             nn.Linear(4*nemb, 4*nemb),
             nn.LeakyReLU(), 
             nn.Linear(4*nemb, 1)
         )
 
-    def forward(self, graph_data, graph_data2, vec_data=None, do_stems=True):
-        random_s_emb1 = self.v1_model(copy.deepcopy(graph_data))
-        random_s_emb2 = self.v1_model(copy.deepcopy(graph_data2))
+    def forward(self, graph_data, vec_data=None, do_stems=True):
+        random_s_emb = self.v1_model(copy.deepcopy(graph_data))
         
-        global_mean_pool_out = torch.cat([random_s_emb1[:-1], random_s_emb2[1:]], dim = -1)
+        global_mean_pool_out = torch.cat([random_s_emb[:-1], random_s_emb[1:]], dim = -1)
         mol_preds = self.global2pred(global_mean_pool_out)
         #print(mol_preds)
         return mol_preds
