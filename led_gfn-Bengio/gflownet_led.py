@@ -89,7 +89,7 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
     for ep in range(traj_lengths.shape[0]):
         offset = cumul_lens[ep]
         T = int(traj_lengths[ep])
-        transition_rs[offset:offset + T] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
+        transition_rs[offset:offset + T] += (R[ep] - torch.sum(transition_rs[offset:offset+T]))/T
         for i in range(T):
             for j in range(i, T):
                 # This flag is False if the endpoint flow of this subtrajectory is R == F(s_T)
@@ -109,7 +109,7 @@ def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
     for ep in range(traj_lengths.shape[0]):
         offset = cumul_lens[ep]
         T = int(traj_lengths[ep])
-        transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
+        transition_rs[offset:offset + T] += (R[ep] - torch.sum(transition_rs[offset:offset+T]))/T
         
         for i in range(T):
             flag = float(i + 1 < T)
