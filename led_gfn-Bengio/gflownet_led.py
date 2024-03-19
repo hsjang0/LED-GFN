@@ -89,14 +89,14 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
     for ep in range(traj_lengths.shape[0]):
         offset = cumul_lens[ep]
         T = int(traj_lengths[ep])
-        transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
+        transition_rs[offset:offset + T] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
         for i in range(T):
-            for j in range(i, T-1):
+            for j in range(i, T):
                 # This flag is False if the endpoint flow of this subtrajectory is R == F(s_T)
                 flag = float(j + 1 < T)
                 acc = F[offset + i] - F[offset + min(j + 1, T - 1)] * flag 
                 for k in range(i, j + 1):
-                    acc += P_F[offset + k] - P_B[offset + k]  - flag*transition_rs[offset + min(k, T - 2)]
+                    acc += P_F[offset + k] - P_B[offset + k]  - flag*transition_rs[offset + min(k, T - 1)]
                 total_loss += acc.pow(2) * Lambda ** (j - i + 1)
                 total_Lambda += Lambda ** (j - i + 1)
     return total_loss / total_Lambda
@@ -111,14 +111,14 @@ def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
         T = int(traj_lengths[ep])
         transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
         
-        for i in range(T-1):
+        for i in range(T):
             flag = float(i + 1 < T)
 
             curr_PF = P_F[offset + i]
             curr_PB = P_B[offset + i]
             curr_F = F[offset + i]
             curr_F_next = F[offset + min(i + 1, T - 1)]
-            curr_r = flag*transition_rs[offset + min(i, T - 2)]
+            curr_r = flag*transition_rs[offset + min(i, T - 1)]
             acc = curr_F + curr_PF - curr_F_next - curr_PB - curr_r
 
             total_loss += acc.pow(2)
@@ -139,8 +139,8 @@ def learning_decomposition(R_est, R, traj_lengths, dropout_prob):
         mask_r[mask_r<dropout_prob] = 0
         mask_r[-1] = 1 if torch.sum(mask_r)==0 else mask_r[-1]
 
-        R_cum = torch.sum(R_est[offset:offset+T-1] * mask_r)
-        R_cum = R_cum * (T-1)/torch.sum(mask_r)
+        R_cum = torch.sum(R_est[offset:offset+T] * mask_r)
+        R_cum = R_cum * T/torch.sum(mask_r)
         total_loss += ((R_cum - R[ep]).pow(2))
         
     return total_loss / traj_lengths.shape[0]
