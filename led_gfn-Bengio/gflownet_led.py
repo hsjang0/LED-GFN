@@ -96,7 +96,7 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
                 flag = float(j + 1 < T)
                 acc = F[offset + i] - F[offset + min(j + 1, T - 1)] * flag 
                 for k in range(i, j + 1):
-                    acc += P_F[offset + k] - P_B[offset + k]  - flag*transition_rs[offset + min(k, T - 2)]
+                    acc += P_F[offset + k] - P_B[offset + k]  - transition_rs[offset + min(k, T - 2)]
                 total_loss += acc.pow(2) * Lambda ** (j - i + 1)
                 total_Lambda += Lambda ** (j - i + 1)
     return total_loss / total_Lambda
