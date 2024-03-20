@@ -94,7 +94,7 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
             for j in range(i, T):
                 # This flag is False if the endpoint flow of this subtrajectory is R == F(s_T)
                 flag = float(j + 1 < T)
-                acc = F[offset + i] - F[offset + min(j + 1, T - 1)] * flag 
+                acc = F[offset + i] - F[offset + min(j + 1, T - 1)] 
                 for k in range(i, j + 1):
                     flag = float(k + 1 < T)
                     acc += P_F[offset + k] - P_B[offset + k]  - transition_rs[offset + min(k, T - 1)]*flag
@@ -118,7 +118,7 @@ def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
             curr_PF = P_F[offset + i]
             curr_PB = P_B[offset + i]
             curr_F = F[offset + i]
-            curr_F_next = flag*F[offset + min(i + 1, T - 1)]
+            curr_F_next = F[offset + min(i + 1, T - 1)]
             curr_r = flag*transition_rs[offset + min(i, T - 1)]
             acc = curr_F + curr_PF - curr_F_next - curr_PB - curr_r
 
