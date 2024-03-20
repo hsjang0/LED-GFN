@@ -1,6 +1,6 @@
 # Note
 
-The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
+The code is based on [https://github.com/ling-pan/FL-GFN](https://github.com/ling-pan/FL-GFN)
 
 ### Requirements
 
