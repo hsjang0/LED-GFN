@@ -71,7 +71,7 @@ parser.add_argument("--progress", default='yes')
 parser.add_argument("--floatX", default='float64')
 parser.add_argument("--include_nblocks", default=False)
 parser.add_argument("--balanced_loss", default=True)
-parser.add_argument("--early_stop_reg", default=0.1, type=float)
+parser.add_argument("--early_stop_reg", default=0.0, type=float)
 parser.add_argument("--initial_log_Z", default=30, type=float)
 parser.add_argument("--objective", default='subTB', type=str)
 # If True this basically implements Buesing et al's TreeSample Q/SoftQLearning, samples uniformly from it though, no MCTS involved
@@ -91,12 +91,13 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
         T = int(traj_lengths[ep])
         transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
         for i in range(T):
-            for j in range(i, T-1):
+            for j in range(i, T):
                 # This flag is False if the endpoint flow of this subtrajectory is R == F(s_T)
                 flag = float(j + 1 < T)
                 acc = F[offset + i] - F[offset + min(j + 1, T - 1)] * flag 
                 for k in range(i, j + 1):
-                    acc += P_F[offset + k] - P_B[offset + k]  - transition_rs[offset + min(k, T - 2)]
+                    flag = float(k + 1 < T)
+                    acc += P_F[offset + k] - P_B[offset + k]  - transition_rs[offset + min(k, T - 1)]*flag
                 total_loss += acc.pow(2) * Lambda ** (j - i + 1)
                 total_Lambda += Lambda ** (j - i + 1)
     return total_loss / total_Lambda
@@ -111,14 +112,14 @@ def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
         T = int(traj_lengths[ep])
         transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
         
-        for i in range(T-1):
+        for i in range(T):
             flag = float(i + 1 < T)
 
             curr_PF = P_F[offset + i]
             curr_PB = P_B[offset + i]
             curr_F = F[offset + i]
-            curr_F_next = F[offset + min(i + 1, T - 1)]
-            curr_r = flag*transition_rs[offset + min(i, T - 2)]
+            curr_F_next = flag*F[offset + min(i + 1, T - 1)]
+            curr_r = flag*transition_rs[offset + min(i, T - 1)]
             acc = curr_F + curr_PF - curr_F_next - curr_PB - curr_r
 
             total_loss += acc.pow(2)
