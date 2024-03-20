@@ -86,9 +86,11 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
     cumul_lens = torch.cumsum(torch.cat([torch.zeros(1, device=traj_lengths.device), traj_lengths]), 0).long()
     total_loss = torch.zeros(1, device=traj_lengths.device)
     total_Lambda = torch.zeros(1, device=traj_lengths.device)
+    transition_rs = torch.cat([transition_rs,torch.zeros(1, device=traj_lengths.device)], dim =0)
     for ep in range(traj_lengths.shape[0]):
         offset = cumul_lens[ep]
         T = int(traj_lengths[ep])
+        transition_rs[offset+T-1] = 0
         transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
         for i in range(T):
             for j in range(i, T):
@@ -97,7 +99,7 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
                 acc = F[offset + i] - F[offset + min(j + 1, T - 1)] 
                 for k in range(i, j + 1):
                     flag = float(k + 1 < T)
-                    acc += P_F[offset + k] - P_B[offset + k]  - transition_rs[offset + min(k, T - 1)]*flag
+                    acc += P_F[offset + k] - P_B[offset + k]  - transition_rs[offset + min(k, T - 1)]
                 total_loss += acc.pow(2) * Lambda ** (j - i + 1)
                 total_Lambda += Lambda ** (j - i + 1)
     return total_loss / total_Lambda
@@ -107,9 +109,11 @@ def led_subtb_loss(P_F, P_B, F, R, traj_lengths,transition_rs,Lambda=0.9):
 def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
     cumul_lens = torch.cumsum(torch.cat([torch.zeros(1, device=traj_lengths.device), traj_lengths]), 0).long()
     total_loss = torch.zeros(1, device=traj_lengths.device)
+    transition_rs = torch.cat([transition_rs,torch.zeros(1, device=traj_lengths.device)], dim =0)
     for ep in range(traj_lengths.shape[0]):
         offset = cumul_lens[ep]
         T = int(traj_lengths[ep])
+        transition_rs[offset+T-1] = 0
         transition_rs[offset:offset + T-1] += (R[ep] - torch.sum(transition_rs[offset:offset+T-1]))/(T-1)
         
         for i in range(T):
@@ -119,7 +123,7 @@ def led_db_loss(P_F, P_B, F, R, traj_lengths, transition_rs):
             curr_PB = P_B[offset + i]
             curr_F = F[offset + i]
             curr_F_next = F[offset + min(i + 1, T - 1)]
-            curr_r = flag*transition_rs[offset + min(i, T - 1)]
+            curr_r = transition_rs[offset + min(i, T - 1)]
             acc = curr_F + curr_PF - curr_F_next - curr_PB - curr_r
 
             total_loss += acc.pow(2)
