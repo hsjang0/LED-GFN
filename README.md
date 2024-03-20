@@ -8,7 +8,7 @@ This is an official implementation of our paper **Learning Energy Decompositions
 ## Repository Overview
 We provide the PyTorch implementation for LED-GFN framework here. Our implementations are based on prior studies:
 
-- led_gfn-Bengio (**molecule**): The code is based on [https://github.com/GFNOrg/gflownet/tree/master/mols](https://github.com/GFNOrg/gflownet/tree/master/mols)
+- led_gfn-Bengio (**molecule**): The code is based on [https://github.com/ling-pan/FL-GFN](https://github.com/ling-pan/FL-GFN)
 - led_gfn-Shen (**bag and rna sequence**): The code is based on [https://github.com/maxwshen/gflownet](https://github.com/maxwshen/gflownet)
 - led_gfn-Zhang (**maximum independent set**): The code is based on [https://github.com/zdhNarsil/GFlowNet-CombOpt](https://github.com/zdhNarsil/GFlowNet-CombOpt)
 
