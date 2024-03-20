@@ -13,5 +13,5 @@ pip install -r requirements.txt
 ### How to run?
 
 ```sh
-python main.py gflownet_led.py --objective detbal or subtb
+python gflownet_led.py --objective detbal or subtb
 ```
